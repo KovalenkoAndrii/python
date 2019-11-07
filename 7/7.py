@@ -1,85 +1,67 @@
-import math
 from tkinter import *
+from tkinter import messagebox as mb
+from collections import Counter
+import math
 
-def createFirstLabels():
-    label = Label(frameFirstLabel,text = 'First side', width=10)
-    label.pack(side=LEFT)
-    
-    firstSideText = Text(frameFirstLabel,width=5, height=1)
-    firstSideText.pack(side=RIGHT)
+def calculate():
+    defFirstSide = firstSide.get()
+    defSecondSide = secondSide.get()
+    defThirdSide = thirdSide.get()
 
-def createSecondLabels():
-    label = Label(frameSecondLabel,text = 'Second side', width=10)
-    label.pack(side=LEFT)
-    
-    secondSideText = Text(frameSecondLabel,width=5, height=1)
-    secondSideText.pack(side=RIGHT)
-
-def createThirdLabels():
-    label = Label(frameThirdLabel, text = 'Third side', width=10)
-    label.pack(side=LEFT)
-    
-    thirdSideText = Text(frameThirdLabel, width=5, height=1)
-    thirdSideText.pack(side=RIGHT)
-    
-def createButtons():
-    buttonSquare = Button(frameButton, text="Square", command=calculateSquare)
-    buttonSquare.pack(side=LEFT)
-
-    buttonPerimeter = Button(frameButton, text="Perimeter", command=calculatePerimeter)
-    buttonPerimeter.pack(side=RIGHT)
-
-def calculateSquare():
     try:
-        intFirstSide = int(firstSideText.get(1.0, END))
-        intSecondSide = int(secondSideText.get(1.0, END))
-        intThirdSide = int(thirdSideText.get(1.0, END))
+        showResult = False
+        intFirst = int(defFirstSide)
+        intSecond = int(defSecondSide)
+        intThird = int(defThirdSide)
+        if (intFirst + intSecond) > intThird and (intFirst + intThird) > intSecond and (intSecond + intThird) > intFirst :
+            if intFirst > 0 and intSecond > 0 and intThird > 0:
+                showResult = True
+        p = (intFirst + intSecond+ intThird)/2
+        triangleSquare = math.sqrt(p * (p - intFirst) * (p - intSecond) * (p - intThird))
     except Exception:
-        resulLabel['text'] = 'Not valid value'
-        return
+        showResult = False
+        mb.showinfo(title="Error", message="Not valid value")
+       
+    if showResult:
+        result = []
+        if isCalculatePerimetr.get() == 1:
+            result.append(f'Perimeter = {p*2}')
+        if isCalculateSquare.get() == 1:
+            result.append(f'Square = {triangleSquare}')
+        if len(result) == 0:
+            mb.showinfo(title="Info", message="Please select option")
+        else:
+            mb.showinfo(title="Result", message=result)
+            
 
-    p = (intFirstSide+intSecondSide+intThirdSide) / 2
-    square = math.sqrt(p * (p - intFirstSide) * (p - intSecondSide) * (p - intThirdSide))
-    resulLabel['text'] = f'Square = {square}'
 
+root = Tk()
 
-def calculatePerimeter():
-    try:
-        intFirstSide = int(firstSideText.get(1.0, END))
-        intSecondSide = int(secondSideText.get(1.0, END))
-        intThirdSide = int(thirdSideText.get(1.0, END))
-    except Exception:
-        resulLabel['text'] = 'Not valid value'
-        return
+root.geometry('600x400+200+100')
 
-    P = intFirstSide+intSecondSide+intThirdSide
-    resulLabel['text'] = f'Square = {P}'
+isCalculateSquare = IntVar()
+isCalculateSquare.set(0)
+isCalculatePerimetr = IntVar()
+isCalculatePerimetr.set(0)
 
-if __name__ == '__main__':
+SquareCheck = Checkbutton(text="Square", variable=isCalculateSquare, onvalue = 1)
+PerimetrCheck = Checkbutton(text="Perimetr", variable=isCalculatePerimetr, onvalue = 1)
+button = Button(text="Calculate", command=calculate)
 
-    root = Tk()
+firstSide = IntVar()
+labelFirstSide = Entry(textvariable = firstSide)
+labelFirstSide.pack()
 
-    titleLabel = Label(text = 'Enter value side triangle')
-    titleLabel.pack()
+secondSide = IntVar()
+labelSecondSide = Entry(textvariable = secondSide)
+labelSecondSide.pack()
 
-    frameFirstLabel = Frame()
-    frameFirstLabel.pack()
-    createFirstLabels()
+thirdSide = IntVar()
+labelThirdSide = Entry(textvariable = thirdSide)
+labelThirdSide.pack()
 
-    frameSecondLabel = Frame()
-    frameSecondLabel.pack()
-    createSecondLabels()
-    
-    frameThirdLabel = Frame()
-    frameThirdLabel.pack()
-    createThirdLabels()
+SquareCheck.pack()
+PerimetrCheck.pack()
+button.pack()
 
-    frameButton = Frame()
-    frameButton.pack()
-    createButtons()
-
-    resulLabel = Label()
-    resulLabel.pack()
-
-    root.columnconfigure(0, minsize=5)
-    root.mainloop()
+root.mainloop()

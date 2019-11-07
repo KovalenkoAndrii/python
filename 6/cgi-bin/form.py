@@ -24,17 +24,23 @@ try:
     intFirst = int(firstSide)
     intSecond = int(secondSide)
     intThird = int(thirdSide)
-    showResult = True
+
+    if (intFirst + intSecond) > intThird and (intFirst + intThird) > intSecond and (intSecond + intThird) > intFirst :
+        if intFirst > 0 and intSecond > 0 and intThird > 0:
+            showResult = True
 except Exception:
     print("<p>Not valid value</p>")
 
-p = (intFirst + intSecond+ intThird)/2
-triangleSquare = math.sqrt(p * (p - intFirst) * (p - intSecond) * (p - intThird))
 if showResult:
+    p = (intFirst + intSecond+ intThird)/2
+    triangleSquare = math.sqrt(p * (p - intFirst) * (p - intSecond) * (p - intThird))
     print("<h1>Result computing:</h1>")
     print("<p>First side triangle: {}</p>".format(firstSide))
     print("<p>Second side triangle: {}</p>".format(secondSide))
     print("<p>Third side triangle: {}</p>".format(thirdSide))
     print("<p>Result: {}</p>".format(triangleSquare))
+else:
+    print("<p>Not valid value</p>")
+    
 print("""</body>
         </html>""")
